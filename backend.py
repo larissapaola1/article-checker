@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, AnyUrl
 from newspaper import Article
+import re
 
 app = FastAPI()
 
@@ -13,7 +14,7 @@ SOURCE_CREDIBILITY = {
 }
 
 class ArticleRequest(BaseModel):
-    url: str
+    url: AnyUrl  # URL validation
 
 @app.post("/check")
 def check_article(request: ArticleRequest):
@@ -23,7 +24,7 @@ def check_article(request: ArticleRequest):
         article.parse()
 
         # Extract domain name
-        domain = request.url.split("/")[2].replace("www.", "")
+        domain = request.url.hostname.lower().replace("www.", "")
         credibility = SOURCE_CREDIBILITY.get(domain, {"score": 50, "bias": "Unknown"})
 
         return {
@@ -33,4 +34,4 @@ def check_article(request: ArticleRequest):
             "text": article.text[:500],  # Preview of article text
         }
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=f"Error processing article: {str(e)}")
