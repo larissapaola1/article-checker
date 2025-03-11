@@ -15,6 +15,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "dev": "concurrently \"npm start\" \"cd .. && uvicorn backend:app --host 0.0.0.0 --port 8000 --reload\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
