@@ -11,7 +11,7 @@ app = FastAPI()
 # Allow requests from the frontend URL
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React dev server
+    allow_origins=["http://localhost:3000", "https://article-checker-0suq.onrender.com"],  # React dev server
     allow_credentials=True,
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
     allow_headers=["*"],  # Allow all headers
